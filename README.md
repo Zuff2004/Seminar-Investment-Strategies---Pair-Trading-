@@ -13,6 +13,7 @@ The project investigates whether a long-only ON/PN relative-value rotation strat
 
 Unlike traditional long-short pairs trading, the strategy preserves company-level exposure and does not short either share class. It is implemented as a long-only share-class rotation overlay on a fundamentally selected Brazilian equity portfolio.
 
+
 ## Main Features
 
 - Construction of an ON/PN Brazilian equity universe
