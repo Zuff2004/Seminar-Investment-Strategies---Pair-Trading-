@@ -1,3 +1,12 @@
+"""
+Company-level policy assignment for the ON/PN rotation strategy.
+
+The policy engine translates training-period statistical evidence into a small
+set of trading rules.  The final portfolio uses these rules to decide how wide
+each company can rotate between ON and PN shares and how large a spread
+deviation is required before trading.
+"""
+
 from dataclasses import dataclass
 
 import pandas as pd
@@ -45,9 +54,9 @@ class CompanyPolicyEngine:
        - companies that passed the hard filters receive normal statistical
          policies;
        - companies manually forced into the final portfolio but that did not
-         pass the hard filters receive forced_default_rotation.
+         pass the hard filters receive manual_inclusion_rotation.
 
-    This avoids mixing statistically selected defensive_rotation companies
+    This avoids mixing statistically selected fallback-rotation companies
     with manually forced companies.
     """
 
@@ -84,7 +93,7 @@ class CompanyPolicyEngine:
           into the policy map even if they did not pass the hard filters;
         - companies that passed hard filters receive a normal statistical policy;
         - companies that did not pass hard filters but were forced receive
-          forced_default_rotation.
+          manual_inclusion_rotation.
 
         Parameters
         ----------
@@ -170,11 +179,11 @@ class CompanyPolicyEngine:
 
             # --------------------------------------------------------
             # Companies manually included but not statistically selected:
-            # receive separate forced default policy.
+            # receive the separate manual-inclusion policy.
             # --------------------------------------------------------
 
             elif company in forced_companies:
-                policy = self.build_forced_default_policy(
+                policy = self.build_manual_inclusion_policy(
                     company=company,
                     correlation=row["correlation"],
                     spread_volatility=row["spread_volatility"],
@@ -426,7 +435,7 @@ class CompanyPolicyEngine:
         if strong_relation and high_quality:
             return CompanyPolicy(
                 company=company,
-                policy_group="strable_pair_tracking",
+                policy_group="stable_pair_tracking",
                 min_weight_on=0.49,
                 max_weight_on=0.51,
                 entry_threshold=4.0,
@@ -488,10 +497,10 @@ class CompanyPolicyEngine:
         )
 
     # ============================================================
-    # Forced/default policy for manual portfolio companies (Manual Inclusion Rotation)
+    # Manual-inclusion policy for final portfolio companies
     # ============================================================
 
-    def build_forced_default_policy(
+    def build_manual_inclusion_policy(
         self,
         company: str,
         correlation: float,
@@ -501,18 +510,17 @@ class CompanyPolicyEngine:
         quality_score: float,
     ) -> CompanyPolicy:
         """
-        Builds the default policy for companies manually included in the final
-        fundamental-weighted portfolio but not selected by the hard statistical
+        Builds the policy for companies manually included in the final
+        fundamental-weighted portfolio despite not passing the hard statistical
         filters.
 
         Economic interpretation:
         - the company is included for portfolio construction/fundamental reasons;
         - the ON/PN statistical evidence was not strong enough to pass the hard
           universe filters;
-        - therefore, the strategy can rotate, but only inside a conservative
-          allocation band and only after stronger deviations.
+        - therefore, the strategy can rotate, but only after stronger deviations.
 
-        This policy is intentionally separate from defensive_rotation.
+        This policy is intentionally separate from statistical_fallback_rotation.
         """
 
         correlation = self._safe_number(correlation, fallback=0.0)
@@ -541,12 +549,13 @@ class CompanyPolicyEngine:
             company=company,
             policy_group="manual_inclusion_rotation",
 
-            # Conservative band for manually included companies.
-            # These companies did not pass the hard statistical filters.
+            # Manually included companies are allowed to rotate fully between
+            # ON and PN, but only after stronger signals than the baseline
+            # balanced rotation rule.
             min_weight_on=0.0,
             max_weight_on=1.0,
 
-            # Stronger entry requirement than normal defensive rotation.
+            # Stronger entry requirement than balanced reversion rotation.
             entry_threshold=2.0,
             exit_threshold=0.5, 
 
@@ -556,9 +565,9 @@ class CompanyPolicyEngine:
             explanation=(
                 "Company was manually included in the final fundamental-weighted "
                 "portfolio despite not passing the hard statistical universe "
-                "filters. It therefore receives forced_default_rotation: a "
-                "separate conservative rule that keeps the ON/PN allocation close "
-                "to 50/50 and requires stronger spread deviations before trading."
+                "filters. It therefore receives manual_inclusion_rotation: a "
+                "separate rule that requires stronger spread deviations before "
+                "trading and uses a shorter signal window."
             ),
         )
 

@@ -13,6 +13,7 @@ The project investigates whether a long-only ON/PN relative-value rotation strat
 
 Unlike traditional long-short pairs trading, the strategy preserves company-level exposure and does not short either share class. It is implemented as a long-only share-class rotation overlay on a fundamentally selected Brazilian equity portfolio.
 
+The final portfolio uses fixed initial company weights. These weights are not rebalanced back to target weights through time; they drift with company-level performance. The active allocation occurs within each company, where the strategy rotates between ON and PN share classes according to the assigned policy.
 
 ## Main Features
 
@@ -45,14 +46,49 @@ The implemented after-tax portfolio achieves:
 
 The strategy outperforms the passive 50/50 ON/PN benchmark and the Ibovespa over the same out-of-sample period.
 
+## How to Run
+
+Install the Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the final empirical pipeline from the repository root:
+
+```bash
+python src/final_main.py
+```
+
+The script writes updated tables and plots to `final_results/`.
+
+The optional robustness analysis can be run separately:
+
+```bash
+python src/robustness_analysis.py
+```
+
 ## Repository Structure
 
 ```text
 src/
-    data loading, filtering, policy engine, backtesting, portfolio construction
+    final_main.py                      final baseline pipeline
+    robustness_analysis.py             optional sensitivity analysis
+    project_config.py                  paths, dates, costs, taxes, universe
+    data_loader.py                     Yahoo Finance download and CSV loading
+    pair_data.py                       ON/PN/Ibovespa alignment and returns
+    universe_filter.py                 statistical pair filtering
+    company_policy_engine.py           company-specific policy assignment
+    rotation_signal_engine.py          rolling spread z-score target weights
+    share_class_rotation_backtester.py trade execution, costs, realized PnL
+    individual_tax_account.py          company-level monthly tax helper
+    benchmarks.py                      passive 50/50 and Ibovespa benchmarks
+    individual_comparison.py           individual result and metric tables
+    performance_metrics.py             return, Sharpe, drawdown, hit ratio
+    plot_builder.py                    individual and portfolio plots
+
+data/raw/
+    cached market data used by the pipeline
 
 final_results/
     generated CSV outputs, performance summaries, robustness results, and plots
-
-paper/
-    final seminar paper and supporting LaTeX files

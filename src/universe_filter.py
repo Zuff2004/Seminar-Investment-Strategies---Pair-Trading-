@@ -1,3 +1,11 @@
+"""
+Training-period statistical filter for the tradable ON/PN universe.
+
+The filter checks data availability, missing observations, liquidity,
+correlation, cointegration, ADF evidence, and spread opportunity before a pair
+is allowed into the statistical strategy universe.
+"""
+
 import numpy as np
 import pandas as pd
 from statsmodels.tsa.stattools import coint, adfuller

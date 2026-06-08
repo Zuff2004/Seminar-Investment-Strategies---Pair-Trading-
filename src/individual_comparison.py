@@ -1,3 +1,11 @@
+"""
+Company-level result assembly and metric calculation.
+
+After a strategy backtest and its benchmarks are created, this module aligns
+the curves, calculates comparable performance metrics, and saves the individual
+CSV files used by the final portfolio construction.
+"""
+
 import pandas as pd
 
 from performance_metrics import PerformanceMetrics

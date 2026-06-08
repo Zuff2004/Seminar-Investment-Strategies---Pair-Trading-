@@ -1,3 +1,11 @@
+"""
+Central configuration objects for the final ON/PN project.
+
+The dataclasses in this file define paths, dates, universe settings, signal
+defaults, policy thresholds, costs, and tax assumptions used by the pipeline.
+Keeping them here makes the empirical setup easier to audit and reproduce.
+"""
+
 from dataclasses import dataclass, field
 from pathlib import Path
 

@@ -1,3 +1,11 @@
+"""
+Rolling spread-z-score signal generation for ON/PN rotation.
+
+The signal engine converts each company's log ON/PN spread into target ON and
+PN weights.  It does not execute trades; the backtester applies those target
+weights with the configured execution lag and cost/tax assumptions.
+"""
+
 import numpy as np
 import pandas as pd
 

@@ -1,3 +1,11 @@
+"""
+Trade execution engine for one long-only ON/PN share-class rotation backtest.
+
+The backtester converts target weights into trades, updates share quantities,
+charges transaction costs, records realized PnL, and optionally connects those
+realizations to the tax-accounting helper.
+"""
+
 import numpy as np
 import pandas as pd
 

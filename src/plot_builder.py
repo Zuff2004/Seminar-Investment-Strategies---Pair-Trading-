@@ -1,3 +1,10 @@
+"""
+Plot generation for individual companies and final portfolio comparisons.
+
+This module only reads completed result tables and writes figures.  It does not
+change signals, trades, taxes, or performance metrics.
+"""
+
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -134,7 +141,7 @@ class PlotBuilder:
         Parameters
         ----------
         portfolio_comparison:
-            Output from PortfolioEngine.build_portfolio_comparison.
+            Portfolio comparison DataFrame created by the final pipeline.
 
         Returns
         -------

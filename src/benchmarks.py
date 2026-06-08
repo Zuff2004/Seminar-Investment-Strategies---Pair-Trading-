@@ -1,3 +1,12 @@
+"""
+Passive benchmark construction for the ON/PN project.
+
+The active strategy is evaluated against two simple buy-and-hold references:
+a company-level 50/50 ON/PN allocation and an Ibovespa allocation.  This
+module keeps those benchmark calculations separate from signal generation and
+strategy execution.
+"""
+
 import pandas as pd
 
 

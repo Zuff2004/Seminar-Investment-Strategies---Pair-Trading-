@@ -1,3 +1,12 @@
+"""
+Unified final pipeline for the ON/PN share-class rotation project.
+
+Running this script produces the final seminar outputs: statistical-filtering
+individual results, final fundamental-weighted portfolio inputs, portfolio-level
+tax records, final metrics, and plots.  It is the main entry point for
+replicating the results reported in the paper.
+"""
+
 import pandas as pd
 
 from project_config import ProjectConfig

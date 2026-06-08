@@ -1,3 +1,11 @@
+"""
+Preparation of one company's ON/PN price and return dataset.
+
+``PairData`` receives already-loaded ON, PN, and Ibovespa prices, aligns them
+on common trading dates, and creates the return columns consumed by filters,
+signals, benchmarks, and backtests.
+"""
+
 import pandas as pd
 
 

@@ -1,3 +1,11 @@
+"""
+Market-data access for the ON/PN project.
+
+The loader either downloads adjusted market data from Yahoo Finance or reads
+the cached CSV files in ``data/raw``.  Downstream modules receive clean price
+and volume series and do not need to know where the files came from.
+"""
+
 from pathlib import Path
 
 import pandas as pd

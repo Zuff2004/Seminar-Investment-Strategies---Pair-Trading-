@@ -1,3 +1,11 @@
+"""
+Monthly tax-accounting helper for one company-level ON/PN backtest.
+
+The final portfolio applies taxes at the portfolio level, but this account is
+still used when individual-company after-tax diagnostics are required.  It
+tracks realized gains, losses, monthly taxable profit, and loss carryforward.
+"""
+
 import pandas as pd
 
 

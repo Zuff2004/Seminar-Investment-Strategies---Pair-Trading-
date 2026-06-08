@@ -1,3 +1,11 @@
+"""
+Reusable performance metrics for strategy and benchmark equity curves.
+
+The project uses the same formulas for every curve so that total return,
+annualized return, volatility, Sharpe ratio, drawdown, and hit ratio are
+directly comparable across strategies and benchmarks.
+"""
+
 import numpy as np
 import pandas as pd
 
